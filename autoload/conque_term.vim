@@ -689,7 +689,7 @@ function! conque_term#set_mappings(action) "{{{
 
     " Map <C-w> in insert mode
     if exists('g:ConqueTerm_CWInsert') && g:ConqueTerm_CWInsert == 1
-        inoremap <silent> <buffer> <C-w> <Esc><C-w>
+        inoremap <silent> <buffer> <C-w> <Esc>:let b:ConqueTerm_LeftInInsert=1<cr><C-w>
     endif
     " }}}
 
@@ -992,6 +992,10 @@ function! conque_term#on_focus(...) " {{{
     if g:ConqueTerm_InsertOnEnter == 1
         startinsert!
     endif
+    if exists("b:ConqueTerm_LeftInInsert") && b:ConqueTerm_LeftInInsert == 1 && g:ConqueTerm_InsertOnEnter == 2
+        startinsert!
+    endif
+    let b:ConqueTerm_LeftInInsert = 0
 
 endfunction " }}}
 

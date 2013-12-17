@@ -261,10 +261,13 @@ workaround.
 <
 3.1.6 Insert mode when entering buffer              *ConqueTerm_InsertOnEnter*
 
-If set to 1 then you will automatically go into insert mode when you enter the
-buffer. This diverges from normal Vim behavior. If 0 you will still be in
-normal mode.
+This option defines whether you will be in insert or normal mode upon entering
+the Conque buffer.
 >
+   0 - stay in normal mode (as with other VIM windows)
+   1 - switch to insert mode whenever you enter Conque buffer
+   2 - restore the mode used when you left the Conque buffer
+
     let g:ConqueTerm_InsertOnEnter = 0
 <
 3.1.7 Close buffer when program exits                  *ConqueTerm_CloseOnEnd*
