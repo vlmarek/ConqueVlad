@@ -711,6 +711,17 @@ function! conque_term#set_mappings(action) "{{{
                 endif
                 continue
             endif
+
+            " Might be <BS>, in which case skip the remapping
+            if i == 127
+                silent redir => my_bs
+                silent set t_kb
+                redir END
+                if "^?" == substitute(my_bs, '.*\s', '', 'g')
+                    continue
+                endif
+            endif
+
             if l:action == 'start'
                 sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i) . " <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(" . i . ")<CR>"
             else
