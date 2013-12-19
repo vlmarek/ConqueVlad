@@ -105,6 +105,9 @@ class Conque:
     # do we need to move the cursor?
     cursor_set = False
 
+    # Whether we are in 'start', 'normal' or 'insert' mode
+    current_mode = 'start'
+
     # current character set, ascii or graphics
     character_set = 'ascii'
 
@@ -1045,13 +1048,59 @@ class Conque:
             self.proc.window_resize(self.lines, self.columns)
 
     def insert_enter(self):
-        """ Run commands when user enters insert mode. """
+        """ Run commands when user enters insert mode.
+
+        This actually happens very often, during every keypress because of i<C-o> usage.
+        """
 
         # check window size
         self.update_window_size()
 
         # we need to set the cursor position
         self.cursor_set = False
+
+        b = vim.current.buffer
+
+        # b:current_mode can have these values:
+        #  insert - set when Conque buffer is created and later in this function
+        #  normal - set by g:ConqueTerm_EscKey (see conque_term.vim)
+        #  edit  - set by conque_term#set_mappings when entering the 'edit' mode
+        b_vim_mode = vim.eval('b:current_mode')
+        if b_vim_mode == 'edit':
+            # In edit mode the mark '^ was probably already changed, we must
+            # use our backup one
+            (x, line, col, x) = vim.eval('getpos("\'w")')
+            b_vim_mode = 'insert'
+        else:
+            (x, line, col, x) = vim.eval('getpos("\'^")')
+        line = int(line)
+
+        win_top = self.screen.get_top()
+
+        #if int(vim.eval('line("w$")')) > 4:
+        #    text = "%d,%s -> %d:%d (%d)" % (line, col, self.l, self.c, win_top)
+        #    b[1] = "   PYTHON:  %s (%s)" % ( self.current_mode, vim.eval('localtime()') )
+        #    b[2] = "      VIM:  %s" % b_vim_mode
+        #    b[3] = "      TOP:  %d" % win_top
+        #    b[4] = "     %s (would set to %d)" % ( text, line + 1 - win_top )
+        if self.current_mode != b_vim_mode:
+            if self.current_mode == 'normal':
+                # We are leaving 'normal' mode, let's position cursor accordingly
+                if line == 0: # The line with mark was deleted?
+                    line = int(vim.eval('line("$")'))
+                    self.c = 1
+                    if len(b[line-1]):
+                        # There's something on last line already, start a new one below
+                        b.append("")
+                        line = line + 1
+                self.l = line + 1 - win_top
+            elif self.current_mode == 'insert':
+                # Since we are leaving 'insert' mode, we will be no longer called
+                # We will only be called again once we get back to insert mode
+                # So let's set vim b:current_mode as this will be right once we are
+                # called again
+                vim.command('let b:current_mode="insert"')
+            self.current_mode = b_vim_mode
 
     def init_tabstops(self):
         """ Intitialize terminal tabstop positions. """

@@ -520,6 +520,8 @@ function! conque_term#open(...) "{{{
 
     " set key mappings and auto commands 
     if is_buffer
+        " Conque term always starts in insert mode. See comments in conque.py
+        let b:current_mode='insert'
         call conque_term#set_mappings('start')
     endif
 
@@ -604,6 +606,19 @@ function! conque_term#set_mappings(action) "{{{
     if a:action == 'toggle'
         if exists('b:conque_on') && b:conque_on == 1
             let l:action = 'stop'
+            if b:current_mode != 'edit'
+                " User may exit the 'paused' mode and enter it immediatelly
+                " again, but we must store the mark only during the first
+                " ocassion.
+                " We need to store the mark '^ so that it's not lost if user
+                " enters insert mode during normal buffer editing. We need to
+                " store it to another mark, so that it's automatically moved
+                " as is buffer being edited. Hopefully 'w' is not used that
+                " much ... The 'w mark is being read in insert_enter function
+                " (conque.py)
+                call setpos("'w",getpos("'^"))
+                let b:current_mode = 'edit'
+            endif
             echohl WarningMsg | echomsg "Terminal is paused" | echohl None
         else
             let l:action = 'start'
@@ -673,8 +688,10 @@ function! conque_term#set_mappings(action) "{{{
         " use <Esc><Esc> to send <Esc> to terminal
         if l:action == 'start'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(27)<CR>'
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc> <C-o>:let b:current_mode="normal"<CR><Esc>'
         else
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc>'
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc>'
         endif
     else
         " use <Esc> to send <Esc> to terminal
