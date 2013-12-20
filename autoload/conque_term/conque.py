@@ -1071,7 +1071,6 @@ class Conque:
             # In edit mode the mark '^ was probably already changed, we must
             # use our backup one
             (x, line, col, x) = vim.eval('getpos("\'w")')
-            b_vim_mode = 'insert'
         else:
             (x, line, col, x) = vim.eval('getpos("\'^")')
         line = int(line)
@@ -1084,6 +1083,9 @@ class Conque:
         #    b[2] = "      VIM:  %s" % b_vim_mode
         #    b[3] = "      TOP:  %d" % win_top
         #    b[4] = "     %s (would set to %d)" % ( text, line + 1 - win_top )
+
+        if b_vim_mode == 'edit':
+            b_vim_mode = 'insert'
         if self.current_mode != b_vim_mode:
             if self.current_mode == 'normal':
                 # We are leaving 'normal' mode, let's position cursor accordingly
