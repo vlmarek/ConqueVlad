@@ -373,6 +373,7 @@ class Conque:
         if self.read_count % 32 == 0:
             if not self.proc.is_alive():
                 vim.command('call conque_term#get_instance().close()')
+                self.plain_text("___ PROCESS HAS EXITED ___")
                 return
 
             if self.read_count > 512:
