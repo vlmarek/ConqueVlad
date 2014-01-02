@@ -1050,7 +1050,7 @@ class Conque:
     def insert_enter(self):
         """ Run commands when user enters insert mode.
 
-        This actually happens very often, during every keypress because of i<C-o> usage.
+        This actually happens very often, during every keypress because of <C-o> usage.
         """
 
         # check window size
