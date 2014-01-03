@@ -675,18 +675,6 @@ function! conque_term#set_mappings(action) "{{{
     endif
     " }}}
 
-    " map ASCII 1-31 {{{
-    for c in range(1, 31)
-        " <Esc>
-        if c == 27 || c == 3
-            continue
-        endif
-        if l:action == 'start'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(' . c . ')<CR>'
-        else
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '>'
-        endif
-    endfor
     " bonus mapping: send <C-c> in normal mode to terminal as well for panic interrupts
     if l:action == 'start'
         sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-c> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(3)<CR>'
@@ -725,6 +713,50 @@ function! conque_term#set_mappings(action) "{{{
         inoremap <silent> <buffer> <C-w> <Esc>:let b:ConqueTerm_LeftInInsert=1<cr><C-w>
     endif
     " }}}
+
+    " map command to toggle terminal key mappings {{{
+    if l:action == 'start'
+        " The :echomsg "" is there because otherwise vim switches to
+        " 'normal' mode but does not update the status line which still
+        " shows the '-- INSERT --' text
+        sil exe 'inoremap <silent> <buffer>' . g:ConqueTerm_ToggleKey . ' <C-o>:stopinsert<CR>:call conque_term#set_mappings("toggle")<CR>:echomsg ""<CR>'
+        sil! exe 'nunmap <silent> <buffer>' . g:ConqueTerm_ToggleKey
+    else
+        sil exe 'iunmap <silent> <buffer>' . g:ConqueTerm_ToggleKey
+        sil exe 'nnoremap <silent> <buffer>' . g:ConqueTerm_ToggleKey . ' :<C-u>call conque_term#set_mappings("toggle")<CR>:startinsert<CR>'
+    endif
+    " }}}
+
+
+    " map ASCII 1-31 {{{
+    for c in range(1, 31)
+        " <Esc>
+        if c == 27 || c == 3
+            continue
+        endif
+
+        let tmp_char = '<C-'.nr2char(64 + c).'>'
+        let tmp_map = maparg(tmp_char, 'i', 0, 1)
+
+        if l:action == 'start'
+           if !empty(tmp_map) && tmp_map['silent'] == 1 && tmp_map['buffer'] == 1 && tmp_map['noremap'] == 1
+               " Probably already used in our mapping (like
+               " g:ConqueTerm_EscKey), skip this entry
+               " echomsg "skipping (start)".string(tmp_map)
+               continue
+           endif
+        elseif empty(tmp_map) || match(tmp_map['rhs'], 'write_ord('.c.')') == -1
+            " Not mapped at all or not our mapping; do not unmap
+            " echomsg "skipping (stop)".string(tmp_map)
+            continue
+        endif
+
+        if l:action == 'start'
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(' . c . ')<CR>'
+        else
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> <C-' . nr2char(64 + c) . '>'
+        endif
+    endfor
 
     " map 33 and beyond {{{
     if exists('##InsertCharPre') && g:ConqueTerm_InsertCharPre == 1
@@ -919,16 +951,6 @@ function! conque_term#set_mappings(action) "{{{
         let b:conque_on = 1
     else
         let b:conque_on = 0
-    endif
-    " }}}
-
-    " map command to toggle terminal key mappings {{{
-    if l:action == 'start'
-        sil exe 'inoremap ' . g:ConqueTerm_ToggleKey . ' <C-o>:stopinsert<CR>:call conque_term#set_mappings("toggle")<CR>:echomsg ""<CR>'
-        sil! exe 'nunmap ' . g:ConqueTerm_ToggleKey
-    else
-        sil exe 'iunmap ' . g:ConqueTerm_ToggleKey
-        sil exe 'nnoremap ' . g:ConqueTerm_ToggleKey . ' :<C-u>call conque_term#set_mappings("toggle")<CR>:startinsert<CR>'
     endif
     " }}}
 
