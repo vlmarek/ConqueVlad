@@ -735,6 +735,21 @@ function! conque_term#set_mappings(action) "{{{
         endif
     else
         for i in range(33, 127)
+            let tmp_map = maparg(nr2char(i), 'i', 0, 1)
+
+            if l:action == 'start'
+               if !empty(tmp_map) && tmp_map['silent'] == 1 && tmp_map['buffer'] == 1 && tmp_map['noremap'] == 1
+                   " Probably already used in our mapping (like
+                   " g:ConqueTerm_EscKey), skip this entry
+                   " echomsg "skipping (start)".string(tmp_map)
+                   continue
+               endif
+            elseif empty(tmp_map) || match(tmp_map['rhs'], 'write_ord('.i.')') == -1
+                " Not mapped at all or not our mapping; do not unmap
+                " echomsg "skipping (stop)".string(tmp_map)
+                continue
+            endif
+
             " <Bar>
             if i == 124
                 if l:action == 'start'
