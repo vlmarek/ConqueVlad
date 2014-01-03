@@ -735,7 +735,12 @@ function! conque_term#set_mappings(action) "{{{
         endif
     else
         for i in range(33, 127)
-            let tmp_map = maparg(nr2char(i), 'i', 0, 1)
+            if i == 124
+                let tmp_char = '<Bar>'
+            else
+                let tmp_char = nr2char(i)
+            endif
+            let tmp_map = maparg(tmp_char, 'i', 0, 1)
 
             if l:action == 'start'
                if !empty(tmp_map) && tmp_map['silent'] == 1 && tmp_map['buffer'] == 1 && tmp_map['noremap'] == 1
@@ -750,16 +755,6 @@ function! conque_term#set_mappings(action) "{{{
                 continue
             endif
 
-            " <Bar>
-            if i == 124
-                if l:action == 'start'
-                    sil exe "i" . map_modifier . "map <silent> <buffer> <Bar> <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(124)<CR>"
-                else
-                    sil exe "i" . map_modifier . "map <silent> <buffer> <Bar>"
-                endif
-                continue
-            endif
-
             " Might be <BS>, in which case skip the remapping
             if i == 127
                 silent redir => my_bs
@@ -771,9 +766,9 @@ function! conque_term#set_mappings(action) "{{{
             endif
 
             if l:action == 'start'
-                sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i) . " <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(" . i . ")<CR>"
+                sil exe "i" . map_modifier . "map <silent> <buffer> " . tmp_char . " <C-o>:" . s:py . ' ' . b:ConqueTerm_Var . ".write_ord(" . i . ")<CR>"
             else
-                sil exe "i" . map_modifier . "map <silent> <buffer> " . nr2char(i)
+                sil exe "i" . map_modifier . "map <silent> <buffer> " . tmp_char
             endif
         endfor
     endif
