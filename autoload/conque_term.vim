@@ -641,8 +641,10 @@ function! conque_term#set_mappings(action) "{{{
 
     " if mappings are being removed, add 'un'
     let map_modifier = 'nore'
+    let inv_map_modifier = 'un'
     if l:action == 'stop'
         let map_modifier = 'un'
+        let inv_map_modifier = 'nore'
     endif
     " }}}
 
