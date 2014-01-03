@@ -28,8 +28,9 @@ For differences between ConqueTerm and ConqueVlad please take a look at
         3.1.7 Close buffer when program exits     |ConqueTerm_CloseOnEnd|
         3.1.8 Hide start messages                 |ConqueTerm_StartMessages|
         3.1.9 Regex for highlighting your prompt  |ConqueTerm_PromptRegex|
-        3.1.10 Highlight paused terminal          |ConqueTerm_UnfocusedHighlight|
-        3.1.11 Choose Vim syntax type             |ConqueTerm_Syntax|
+        3.1.10 Default command                    |ConqueTerm_DefaultCommand|
+        3.1.11 Highlight paused terminal          |ConqueTerm_UnfocusedHighlight|
+        3.1.12 Choose Vim syntax type             |ConqueTerm_Syntax|
     3.2 Keyboard                                  |conque-config-keyboard|
         3.2.1 The <Esc> key                       |ConqueTerm_EscKey|
         3.2.2 Toggle terminal input mode          |ConqueTerm_ToggleKey|
@@ -133,6 +134,7 @@ best integration with Vim I suggest different configuration:
     let g:ConqueTerm_ToggleKey = '<c-e>'
     let g:ConqueTerm_InsertModeKey = 'a'
     let g:ConqueTerm_ReadUnfocused = 1
+    let g:ConqueTerm_DefaultCommand = 'bash'
 <
 
 
@@ -325,7 +327,15 @@ syntax highlighting for the prompt line.
 >
     let g:ConqueTerm_PromptRegex = '^\w\+@[0-9A-Za-z_.-]\+:[0-9A-Za-z_./\~,:-]\+\$'
 <
-3.1.10 Highlight paused terminal               *ConqueTerm_UnfocusedHighlight*
+3.1.10 Default command                             *ConqueTerm_DefaultCommand*
+
+You may specify default command to be executed unless you specify one.
+>
+    let g:ConqueTerm_DefaultCommand = 'bash'
+<
+Now running :ConqueTerm without arguments executes bash.
+
+3.1.11 Highlight paused terminal               *ConqueTerm_UnfocusedHighlight*
 
 Conque term visually marks paused terminal to make easier to distinguish
 between insert mode in paused state (when you edit the buffer) and insert mode
@@ -338,7 +348,7 @@ If you want to change the color of the highlight, define your own by
 >
     highlight ConquePausedTerminal ctermbg=230
 <
-3.1.11 Choose Vim syntax type                              *ConqueTerm_Syntax*
+3.1.12 Choose Vim syntax type                              *ConqueTerm_Syntax*
 
 Set the buffer syntax. The default 'conque_term' has highlighting for MySQL, 
 but not much else.

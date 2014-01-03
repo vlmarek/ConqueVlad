@@ -474,8 +474,12 @@ function! conque_term#open(...) "{{{
         return 0
     endif
     if empty(command)
-        echohl WarningMsg | echomsg "Invalid usage: no program path given. Use :ConqueTerm YOUR PROGRAM, e.g. :ConqueTerm ipython" | echohl None
-        return 0
+        if !exists("g:ConqueTerm_DefaultCommand")
+            echohl WarningMsg | echomsg "No program path given. Use :ConqueTerm YOUR PROGRAM, or set g:ConqueTerm_DefaultCommand variable" | echohl None
+            return 0
+        else
+            let command = g:ConqueTerm_DefaultCommand
+        endif
     else
         let cmd_args = split(command, '[^\\]\@<=\s')
         let cmd_args[0] = substitute(cmd_args[0], '\\ ', ' ', 'g')
