@@ -108,6 +108,10 @@ class ConqueScreen(object):
             # XXX / Vim's python3 interface doesn't accept bytes object
             val = str(value)
 
+        # if line is past buffer end, add lines to buffer
+        for i in range(len(self.buffer), buffer_line + 2):
+            self.buffer.append(' ')
+
         # if line is past end of screen, append
         if buffer_line == len(self.buffer):
             self.buffer.append(val)
