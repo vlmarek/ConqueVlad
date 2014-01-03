@@ -124,6 +124,17 @@ join 'normal' and 'edit' mode into one. So either you are in 'insert' mode
 where you interact with the terminal, or you are in 'normal' mode where you
 can scroll back and modify the buffer.
 
+If you want best integration with Vim, use something like
+
+>
+    let g:ConqueTerm_CWInsert = 1
+    let g:ConqueTerm_InsertOnEnter = 2
+    let g:ConqueTerm_ToggleKey = '<c-e>'
+    let g:ConqueTerm_InsertModeKey = 'a'
+    let g:ConqueTerm_ReadUnfocused = 1
+<
+
+
 2.1 General Usage                                      *conque-term-gen-usage*
 
 Type :ConqueTerm <command> to launch an application in the current buffer. Eg:
