@@ -31,11 +31,12 @@ For differences between ConqueTerm and ConqueVlad please take a look at
     3.2 Keyboard                                  |conque-config-keyboard|
         3.2.1 The <Esc> key                       |ConqueTerm_EscKey|
         3.2.2 Toggle terminal input mode          |ConqueTerm_ToggleKey|
-        3.2.3 Enable <C-w> in insert mode         |ConqueTerm_CWInsert|
-        3.2.4 Execute current file in Conque      |ConqueTerm_ExecFileKey|
-        3.2.5 Send current file contents to Conque|ConqueTerm_SendFileKey|
-        3.2.6 Send selected text to Conque        |ConqueTerm_SendVisKey|
-        3.2.7 Function Keys                       |ConqueTerm_SendFunctionKeys|
+        3.2.3 Return back to input mode           |ConqueTerm_InsertModeKey|
+        3.2.4 Enable <C-w> in insert mode         |ConqueTerm_CWInsert|
+        3.2.5 Execute current file in Conque      |ConqueTerm_ExecFileKey|
+        3.2.6 Send current file contents to Conque|ConqueTerm_SendFileKey|
+        3.2.7 Send selected text to Conque        |ConqueTerm_SendVisKey|
+        3.2.8 Function Keys                       |ConqueTerm_SendFunctionKeys|
     3.3 Unix                                      |conque-config-unix|
         3.3.1 Choose your terminal type           |ConqueTerm_TERM|
     3.4 Windows                                   |conque-config-windows|
