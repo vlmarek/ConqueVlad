@@ -72,6 +72,12 @@ let s:save_updatetime = &updatetime
 " have we called the init() function yet?
 let s:initialized = 0
 
+" Define highlihgt unless user already did so
+try
+    silent highlight ConquePausedTerminal
+catch /highlight group not found/
+    highlight link ConquePausedTerminal WarningMsg
+endtry
 
 " Make sure that s:ConqueTerm_InsertModeKey is always valid List
 let s:ConqueTerm_InsertModeKey = []
@@ -630,10 +636,13 @@ function! conque_term#set_mappings(action) "{{{
                 call setpos("'w",getpos("'^"))
                 let b:current_mode = 'edit'
             endif
-            echohl WarningMsg | echomsg "Terminal is paused" | echohl None
+            if !exists("g:ConqueTerm_UnfocusedHighlight") || g:ConqueTerm_UnfocusedHighlight != 0
+                syntax match ConquePausedTerminal '\%1v.' contains=ALL | " First column
+                syntax match ConquePausedTerminal '\(.*\n^\)\?.*\%$' contains=ALL | " Last two lines
+            endif
         else
             let l:action = 'start'
-            echohl WarningMsg | echomsg "Terminal is resumed" | echohl None
+            silent! syntax clear ConquePausedTerminal
         endif
     else
         let l:action = a:action

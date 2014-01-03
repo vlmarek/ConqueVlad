@@ -28,7 +28,8 @@ For differences between ConqueTerm and ConqueVlad please take a look at
         3.1.7 Close buffer when program exits     |ConqueTerm_CloseOnEnd|
         3.1.8 Hide start messages                 |ConqueTerm_StartMessages|
         3.1.9 Regex for highlighting your prompt  |ConqueTerm_PromptRegex|
-        3.1.10 Choose Vim syntax type             |ConqueTerm_Syntax|
+        3.1.10 Highlight paused terminal          |ConqueTerm_UnfocusedHighlight|
+        3.1.11 Choose Vim syntax type             |ConqueTerm_Syntax|
     3.2 Keyboard                                  |conque-config-keyboard|
         3.2.1 The <Esc> key                       |ConqueTerm_EscKey|
         3.2.2 Toggle terminal input mode          |ConqueTerm_ToggleKey|
@@ -312,7 +313,20 @@ syntax highlighting for the prompt line.
 >
     let g:ConqueTerm_PromptRegex = '^\w\+@[0-9A-Za-z_.-]\+:[0-9A-Za-z_./\~,:-]\+\$'
 <
-3.1.10 Choose Vim syntax type                              *ConqueTerm_Syntax*
+3.1.10 Highlight paused terminal               *ConqueTerm_UnfocusedHighlight*
+
+Conque term visually marks paused terminal to make easier to distinguish
+between insert mode in paused state (when you edit the buffer) and insert mode
+in normal state (when you controll the terminal). It visually marks first
+column and last two lines in the buffer. If you want to disable it use
+>
+    let g:ConqueTerm_UnfocusedHighlight = 0
+<
+If you want to change the color of the highlight, define your own by
+>
+    highlight ConquePausedTerminal ctermbg=230
+<
+3.1.11 Choose Vim syntax type                              *ConqueTerm_Syntax*
 
 Set the buffer syntax. The default 'conque_term' has highlighting for MySQL, 
 but not much else.
