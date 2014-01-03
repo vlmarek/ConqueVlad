@@ -73,6 +73,17 @@ let s:save_updatetime = &updatetime
 let s:initialized = 0
 
 
+" Make sure that s:ConqueTerm_InsertModeKey is always valid List
+let s:ConqueTerm_InsertModeKey = []
+if exists('g:ConqueTerm_InsertModeKey')
+    if type(g:ConqueTerm_InsertModeKey) == type("")
+        let s:ConqueTerm_InsertModeKey = [ g:ConqueTerm_InsertModeKey ]
+    elseif type(g:ConqueTerm_InsertModeKey) == type([])
+        let s:ConqueTerm_InsertModeKey = g:ConqueTerm_InsertModeKey
+    else
+        echoerr "g:ConqueTerm_InsertModeKey must be either String or List"
+    endif
+endif
 " }}}
 
 " **********************************************************************************************************
@@ -879,21 +890,13 @@ function! conque_term#set_mappings(action) "{{{
     " }}}
 
     " disable other normal mode keys which insert text {{{
-    if l:action == 'start'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> r :echo "Replace mode disabled in shell."<CR>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> R :echo "Replace mode disabled in shell."<CR>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> c :echo "Change mode disabled in shell."<CR>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> C :echo "Change mode disabled in shell."<CR>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> s :echo "Change mode disabled in shell."<CR>'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> S :echo "Change mode disabled in shell."<CR>'
-    else
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> r'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> R'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> c'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> C'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> s'
-        sil exe 'n' . map_modifier . 'map <silent> <buffer> S'
-    endif
+    for key in s:ConqueTerm_InsertModeKey
+        if l:action == 'start'
+            sil! exe 'n' . inv_map_modifier . 'map <silent> <buffer> '.key
+        else
+            sil exe 'n' . inv_map_modifier . 'map <silent> <buffer> '.key.' :call conque_term#set_mappings("toggle")<CR>'.key
+        endif
+    endfor
     " }}}
 
     " set conque as on or off {{{
