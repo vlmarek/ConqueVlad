@@ -16,7 +16,8 @@ For differences between ConqueTerm and ConqueVlad please take a look at
         2.2.1 Send text to Conque                 |conque-term-send|
         2.2.2 Toggle terminal input mode          |conque-term-input-mode|
         2.2.3 Sending the <Esc> key press         |conque-term-esc|
- 3. Configuration                                 |conque-term-options|
+    2.3 Registering functions                     |conque-term-register|
+ 3. Options                                       |conque-term-options|
     3.1 General                                   |conque-config-general|
         3.1.1 Python version                      |ConqueTerm_PyVersion|
         3.1.2 Fast mode                           |ConqueTerm_FastMode|
@@ -27,7 +28,7 @@ For differences between ConqueTerm and ConqueVlad please take a look at
         3.1.7 Close buffer when program exits     |ConqueTerm_CloseOnEnd|
         3.1.8 Hide start messages                 |ConqueTerm_StartMessages|
         3.1.9 Regex for highlighting your prompt  |ConqueTerm_PromptRegex|
-        3.1.10 Syntax type                        |ConqueTerm_Syntax|
+        3.1.10 Choose Vim syntax type             |ConqueTerm_Syntax|
     3.2 Keyboard                                  |conque-config-keyboard|
         3.2.1 The <Esc> key                       |ConqueTerm_EscKey|
         3.2.2 Toggle terminal input mode          |ConqueTerm_ToggleKey|
