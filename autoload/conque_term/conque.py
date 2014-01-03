@@ -1083,10 +1083,14 @@ class Conque:
         #    b[3] = "      TOP:  %d" % win_top
         #    b[4] = "     %s (would set to %d)" % ( text, line + 1 - win_top )
 
-        if b_vim_mode == 'edit':
-            b_vim_mode = 'insert'
         if self.current_mode != b_vim_mode:
-            if self.current_mode == 'normal':
+            if self.current_mode == 'insert':
+                # Since we are leaving 'insert' mode, we will be no longer called
+                # We will only be called again once we get back to insert mode
+                # So let's set vim b:current_mode as this will be right once we are
+                # called again
+                vim.command('let b:current_mode="insert"')
+            if self.current_mode != 'start':
                 # We are leaving 'normal' mode, let's position cursor accordingly
                 if line == 0: # The line with mark was deleted?
                     line = int(vim.eval('line("$")'))
@@ -1096,12 +1100,7 @@ class Conque:
                         b.append("")
                         line = line + 1
                 self.l = line + 1 - win_top
-            elif self.current_mode == 'insert':
-                # Since we are leaving 'insert' mode, we will be no longer called
-                # We will only be called again once we get back to insert mode
-                # So let's set vim b:current_mode as this will be right once we are
-                # called again
-                vim.command('let b:current_mode="insert"')
+                b_vim_mode = 'insert'
             self.current_mode = b_vim_mode
 
     def init_tabstops(self):
