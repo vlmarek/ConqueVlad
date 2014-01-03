@@ -913,8 +913,12 @@ function! conque_term#set_mappings(action) "{{{
     " }}}
 
     " map command to toggle terminal key mappings {{{
-    if a:action == 'start'
-        sil exe 'nnoremap ' . g:ConqueTerm_ToggleKey . ' :<C-u>call conque_term#set_mappings("toggle")<CR>'
+    if l:action == 'start'
+        sil exe 'inoremap ' . g:ConqueTerm_ToggleKey . ' <C-o>:stopinsert<CR>:call conque_term#set_mappings("toggle")<CR>:echomsg ""<CR>'
+        sil! exe 'nunmap ' . g:ConqueTerm_ToggleKey
+    else
+        sil exe 'iunmap ' . g:ConqueTerm_ToggleKey
+        sil exe 'nnoremap ' . g:ConqueTerm_ToggleKey . ' :<C-u>call conque_term#set_mappings("toggle")<CR>:startinsert<CR>'
     endif
     " }}}
 
