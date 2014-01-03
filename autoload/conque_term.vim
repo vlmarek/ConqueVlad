@@ -699,7 +699,7 @@ function! conque_term#set_mappings(action) "{{{
         " use <Esc><Esc> to send <Esc> to terminal
         if l:action == 'start'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(27)<CR>'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc> <C-o>:let b:current_mode="normal"<CR><Esc>'
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc> <C-o>:call conque_term#set_mappings("toggle")<CR><Esc>'
         else
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc><Esc>'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc>'
@@ -707,7 +707,10 @@ function! conque_term#set_mappings(action) "{{{
     else
         " use <Esc> to send <Esc> to terminal
         if l:action == 'start'
-            sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey . ' <Esc>'
+            " The :echomsg "" is there because otherwise vim switches to
+            " 'normal' mode but does not update the status line which still
+            " shows the '-- INSERT --' text
+            sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey . ' <C-o>:call conque_term#set_mappings("toggle")<CR><Esc>:echomsg ""<CR>'
             sil exe 'i' . map_modifier . 'map <silent> <buffer> <Esc> <C-o>:' . s:py . ' ' . b:ConqueTerm_Var . '.write_ord(27)<CR>'
         else
             sil exe 'i' . map_modifier . 'map <silent> <buffer> ' . g:ConqueTerm_EscKey
