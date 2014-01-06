@@ -380,10 +380,10 @@ this key again to resume terminal mode.
 <
 3.2.3 Return back to input mode                     *ConqueTerm_InsertModeKey*
 Once you are in 'normal' mode, you can switch to 'insert' mode either via
-*ConqueTerm_ToggleKey* or in addition by any keys set in
-*ConqueTerm_InsertModeKey* . Personally I have set this to 'a', so that I can
+|ConqueTerm_ToggleKey| or in addition by any keys set in
+|ConqueTerm_InsertModeKey| . Personally I have set this to 'a', so that I can
 do any editing in the 'normal' mode and then press 'a' which returns me back
-to 'insert' mode. *ConqueTerm_InsertModeKey* can be either single character,
+to 'insert' mode. |ConqueTerm_InsertModeKey| can be either single character,
 or list of characters which return you to 'normal' mode.
 >
     let g:ConqueTerm_InsertModeKey = 'a'
